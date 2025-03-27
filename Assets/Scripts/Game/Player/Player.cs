@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     {
         _ani = GetComponent<Animator>();
         _rig = GetComponent<Rigidbody2D>();
-    }
+    }   
 
     // Update is called once per frame
     void Update()
@@ -23,6 +23,14 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         move();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.collider.tag.Equals("Ground"))
+        {
+            _ani.SetTrigger("Land");
+        }
     }
 
     void move()
