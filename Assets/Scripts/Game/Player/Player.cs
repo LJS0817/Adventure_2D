@@ -7,9 +7,15 @@ public class Player : MonoBehaviour
     Rigidbody2D _rig;
 
     public float Speed;
+    public float JumpForce;
+    Vector2 _velocity;
+
+    bool _isJump;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        _isJump = false;
+        _velocity = Vector2.zero;
         _ani = GetComponent<Animator>();
         _rig = GetComponent<Rigidbody2D>();
     }   
@@ -17,19 +23,38 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        move();
+        jump();
     }
 
     private void FixedUpdate()
     {
-        move();
+        physicsMove();
+        physicsJumpMovement();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.collider.tag.Equals("Ground"))
+        if (collision.collider.CompareTag("Ground"))
+        {
+            _isJump = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Ground"))
         {
             _ani.SetTrigger("Land");
+        }
+    }
+
+    void jump()
+    {
+        if(!_isJump && Input.GetKeyDown(KeyCode.Space))
+        {
+            _ani.SetTrigger("Jump");
+            _isJump = true;
         }
     }
 
@@ -40,7 +65,21 @@ public class Player : MonoBehaviour
         changeMovedState(vel.x);
         turnAround(vel.x);
 
-        _rig.linearVelocity = vel;
+        _velocity = vel;
+    }
+
+    void physicsJumpMovement()
+    {
+        if(_isJump)
+        {
+            _rig.AddForce(transform.up * JumpForce, ForceMode2D.Impulse);
+            _isJump = false;
+        }
+    }
+
+    void physicsMove()
+    {
+        //_rig.linearVelocity = _velocity;
     }
 
     void turnAround(float velX)
