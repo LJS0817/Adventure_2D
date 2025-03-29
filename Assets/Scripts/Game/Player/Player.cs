@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    const float movedVelocity = 0.2f;
     Animator _ani;
     Rigidbody2D _rig;
 
@@ -54,13 +53,17 @@ public class Player : MonoBehaviour
         if(!_isJump && Input.GetKeyDown(KeyCode.Space))
         {
             _ani.SetTrigger("Jump");
-            _isJump = true;
         }
+    }
+
+    public void jumpTrigger()
+    {
+        _isJump = true;
     }
 
     void move()
     {
-        Vector2 vel = transform.right * Input.GetAxis("Horizontal") * Speed * Time.deltaTime;
+        Vector2 vel = transform.right * Input.GetAxisRaw("Horizontal") * Speed;
 
         changeMovedState(vel.x);
         turnAround(vel.x);
@@ -79,7 +82,9 @@ public class Player : MonoBehaviour
 
     void physicsMove()
     {
-        //_rig.linearVelocity = _velocity;
+        _velocity.y = _rig.linearVelocity.y;
+        _velocity.x *= Time.fixedDeltaTime;
+        _rig.linearVelocity = _velocity;
     }
 
     void turnAround(float velX)
@@ -94,7 +99,7 @@ public class Player : MonoBehaviour
 
     void changeMovedState(float velX)
     {
-        if (_ani.GetBool("Moved") && Mathf.Abs(velX) <= movedVelocity) _ani.SetBool("Moved", false);
-        else if (!_ani.GetBool("Moved") && Mathf.Abs(velX) > movedVelocity) _ani.SetBool("Moved", true);
+        if (_ani.GetBool("Moved") && Mathf.Abs(velX) <= 0f) _ani.SetBool("Moved", false);
+        else if (!_ani.GetBool("Moved") && Mathf.Abs(velX) > 0f) _ani.SetBool("Moved", true);
     }
 }
