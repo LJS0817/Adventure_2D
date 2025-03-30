@@ -4,6 +4,7 @@ public class PlayerInputController : MonoBehaviour
 {
     public Transform _mouseIndicatorOffset;
     MouseIndicator _mouseIndicator;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -14,7 +15,7 @@ public class PlayerInputController : MonoBehaviour
     void Update()
     {
         _mouseIndicator.Update();
-        _mouseIndicatorOffset.rotation = _mouseIndicator.GetAngle(transform.position);
+        _mouseIndicatorOffset.rotation = _mouseIndicator.LerpRotation(transform.position, _mouseIndicatorOffset.rotation);
     }
 
 }
