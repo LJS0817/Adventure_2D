@@ -1,22 +1,35 @@
 using UnityEngine;
 
+public enum PLAYER_STATE { 
+    E_IDLE,
+    E_READY,
+    E_ANIMATED,
+
+    E_JUMPING,
+}
+
 public class Player : MonoBehaviour
 {
     Animator _ani;
     Rigidbody2D _rig;
+    SpriteRenderer _renderer;
 
     public float Speed;
     public float JumpForce;
     Vector2 _velocity;
 
-    bool _isJump;
+    PLAYER_STATE _state;
+
+    PlayerInputController _inputController;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _isJump = false;
+        _state = PLAYER_STATE.E_IDLE;
         _velocity = Vector2.zero;
         _ani = GetComponent<Animator>();
         _rig = GetComponent<Rigidbody2D>();
+        _renderer = GetComponent<SpriteRenderer>();
+        _inputController = GetComponent<PlayerInputController>();
     }   
 
     // Update is called once per frame
@@ -36,7 +49,7 @@ public class Player : MonoBehaviour
     {
         if (collision.collider.CompareTag("Ground"))
         {
-            _isJump = false;
+            setState(PLAYER_STATE.E_IDLE);
         }
     }
 
@@ -48,22 +61,40 @@ public class Player : MonoBehaviour
         }
     }
 
+    bool compareState(params PLAYER_STATE[] state)
+    {
+        bool rst = false;
+
+        for(int i = 0; i < state.Length; i++)
+        {
+            rst = rst || _state == state[i];
+        }
+
+        return rst;
+    }
+
+    void setState(PLAYER_STATE st)
+    {
+        _state = st;
+    }
+
     void jump()
     {
-        if(!_isJump && Input.GetKeyDown(KeyCode.Space))
+        if(compareState(PLAYER_STATE.E_IDLE) && Input.GetKeyDown(KeyCode.Space))
         {
+            setState(PLAYER_STATE.E_READY);
             _ani.SetTrigger("Jump");
         }
     }
 
     public void jumpTrigger()
     {
-        _isJump = true;
+        setState(PLAYER_STATE.E_ANIMATED);
     }
 
     void move()
     {
-        Vector2 vel = transform.right * Input.GetAxisRaw("Horizontal") * Speed;
+        Vector2 vel = _inputController.GetHorizontalMovement(Speed);
 
         changeMovedState(vel.x);
         turnAround(vel.x);
@@ -73,10 +104,10 @@ public class Player : MonoBehaviour
 
     void physicsJumpMovement()
     {
-        if(_isJump)
+        if(compareState(PLAYER_STATE.E_ANIMATED))
         {
             _rig.AddForce(transform.up * JumpForce, ForceMode2D.Impulse);
-            _isJump = false;
+            setState(PLAYER_STATE.E_JUMPING);
         }
     }
 
@@ -89,11 +120,9 @@ public class Player : MonoBehaviour
 
     void turnAround(float velX)
     {
-        if ((velX < 0 && transform.localScale.x > 0) || (velX >= 0 && transform.localScale.x < 0))
+        if ((velX < 0 && !_renderer.flipX) || (velX >= 0 && _renderer.flipX))
         {
-            Vector3 scale = transform.localScale;
-            scale.x *= -1;
-            transform.localScale = scale;
+            _renderer.flipX = !_renderer.flipX;
         }
     }
 
