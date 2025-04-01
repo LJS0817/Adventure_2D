@@ -561,6 +561,7 @@ GameObject:
   - component: {fileID: 699713186}
   - component: {fileID: 699713185}
   - component: {fileID: 699713187}
+  - component: {fileID: 699713188}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -764,6 +765,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Marker: {fileID: 460979492}
   _mouseIndicatorOffset: {fileID: 396442775}
+--- !u!114 &699713188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699713180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133686b1787175b44958ac5a8631b043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &702834880
 GameObject:
   m_ObjectHideFlags: 0

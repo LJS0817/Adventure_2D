@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 
 public enum PLAYER_STATE { 
@@ -21,16 +22,22 @@ public class Player : MonoBehaviour
     PLAYER_STATE _state;
 
     PlayerInputController _inputController;
+    SkillController _skill;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _state = PLAYER_STATE.E_IDLE;
         _velocity = Vector2.zero;
+        
         _ani = GetComponent<Animator>();
         _rig = GetComponent<Rigidbody2D>();
         _renderer = GetComponent<SpriteRenderer>();
+
         _inputController = GetComponent<PlayerInputController>();
-    }   
+
+        _skill.GetComponent<SkillController>();
+        _skill.Init(new FastMovement());
+    }
 
     // Update is called once per frame
     void Update()
@@ -130,5 +137,10 @@ public class Player : MonoBehaviour
     {
         if (_ani.GetBool("Moved") && Mathf.Abs(velX) <= 0f) _ani.SetBool("Moved", false);
         else if (!_ani.GetBool("Moved") && Mathf.Abs(velX) > 0f) _ani.SetBool("Moved", true);
+    }
+
+    public void SkillActivate()
+    {
+        _skill.Activate(_skill.GetCurrentSkillIndex());
     }
 }
