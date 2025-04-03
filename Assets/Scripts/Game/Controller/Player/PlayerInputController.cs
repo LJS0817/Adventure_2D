@@ -27,6 +27,6 @@ public class PlayerInputController : MonoBehaviour
         }
     }
 
-    public bool IsMarkerTurned() { return _mouseIndicator.GetContacted(); }
-    public Vector2 GetHorizontalMovement(float speed) { return transform.right * Input.GetAxisRaw("Horizontal") * speed; }
+    public Vector2 GetUpVector() { return _mouseIndicator.GetUpVector(); }
+    public float GetHorizontalMovement(float speed) { return Input.GetAxisRaw("Horizontal") * speed; }
 }

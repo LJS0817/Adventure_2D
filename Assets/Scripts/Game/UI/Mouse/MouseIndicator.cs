@@ -4,13 +4,12 @@ public class MouseIndicator
 {
     const float _raycastDist = 7.5f;
     Transform _marker;
+    Vector2 _up;
 
-    bool _contacted;
-    
     public MouseIndicator(Transform m)
     {
         _marker = m;
-        _contacted = false;
+        _up = Vector2.zero;
     }
 
     Quaternion getAngle(Vector2 pos)
@@ -25,7 +24,7 @@ public class MouseIndicator
         return Quaternion.Lerp(rot, getAngle(pos), 0.2f);
     }
 
-    public bool GetContacted() { return _contacted; }
+    public Vector2 GetUpVector() { return _up; }
 
     public void SetMarker(Vector2 pos, Vector2 dir, Quaternion rot)
     {
@@ -36,8 +35,7 @@ public class MouseIndicator
             if (hit.collider != null)
             {
                 _marker.position = hit.point;
-                _marker.up = hit.normal;
-                if(!_contacted) _contacted = true;
+                _marker.up = _up = hit.normal;
             }
         }
         else
@@ -45,7 +43,7 @@ public class MouseIndicator
             _marker.position = pos + dir * _raycastDist;
             if (_marker.rotation != rot)
             {
-                _contacted = false;
+                _up = Vector2.zero;
                 _marker.rotation = rot;
             }
         }

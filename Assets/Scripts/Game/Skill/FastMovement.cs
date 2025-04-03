@@ -15,7 +15,7 @@ public class FastMovement : Skill
             {
                 Debug.Log("-----------------------------------------");
                 _player.GetRigibbody().linearVelocity *= 0.3f;
-                if (_player.GetInputController().IsMarkerTurned()) _player.transform.up = _player.GetInputController().Marker.up;
+                _player.transform.up = _player.GetInputController().GetUpVector();
                 _player.UseGravity(true);
 
                 _player.SetState(PLAYER_STATE.E_IDLE);
@@ -29,7 +29,6 @@ public class FastMovement : Skill
         _targetPos = _player.GetInputController().Marker.position;
         Vector2 dir = _targetPos - (Vector2)_player.transform.position;
 
-        //_player.GetRigibbody().gravityScale = 0f;
         _player.UseGravity(false);
         _player.GetRigibbody().AddForce(dir.normalized * _power, ForceMode2D.Impulse);
     }
