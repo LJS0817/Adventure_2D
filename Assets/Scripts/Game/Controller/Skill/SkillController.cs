@@ -18,16 +18,17 @@ public class SkillController : MonoBehaviour
     }
 
     public byte GetCurrentSkillIndex() { return _index; }
-    public void Activate(byte idx) { _skills[idx].Activate(); }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public void Activate(byte idx, Player p) { _skills[idx].Activate(p); }
 
-    // Update is called once per frame
-    void Update()
-    {
+    //// Start is called once before the first execution of Update after the MonoBehaviour is created
+    //void Start()
+    //{
         
-    }
+    //}
+
+    //// Update is called once per frame
+    //void Update()
+    //{
+        
+    //}
 }

@@ -26,10 +26,7 @@ public class PlayerInputController : MonoBehaviour
         }
     }
 
+    public Vector2 GetMouseDir() { return _mouseIndicatorOffset.up; }
 
-
-    public Vector2 GetHorizontalMovement(float speed)
-    {
-        return transform.right * Input.GetAxisRaw("Horizontal") * speed;
-    }
+    public Vector2 GetHorizontalMovement(float speed) { return transform.right * Input.GetAxisRaw("Horizontal") * speed; }
 }

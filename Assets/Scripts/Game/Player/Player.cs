@@ -141,6 +141,10 @@ public class Player : MonoBehaviour
 
     public void SkillActivate()
     {
-        _skill.Activate(_skill.GetCurrentSkillIndex());
+        _skill.Activate(_skill.GetCurrentSkillIndex(), this);
     }
+
+    public Rigidbody2D GetRigibbody() { return _rig; }
+
+    public PlayerInputController GetInputController() { return _inputController; }
 }
