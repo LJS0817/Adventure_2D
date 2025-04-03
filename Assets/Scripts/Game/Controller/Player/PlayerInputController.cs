@@ -19,14 +19,14 @@ public class PlayerInputController : MonoBehaviour
     void Update()
     {
         _mouseIndicatorOffset.rotation = _mouseIndicator.LerpRotation(_mouseIndicatorOffset.position, _mouseIndicatorOffset.rotation);
-        _mouseIndicator.SetMarker(transform.position, _mouseIndicatorOffset.up);
+        _mouseIndicator.SetMarker(transform.position, _mouseIndicatorOffset.up, transform.rotation);
 
         if(Input.GetMouseButtonDown(0)) {
             _player.SkillActivate();
+            _player.SetState(PLAYER_STATE.E_FAST_MOVE);
         }
     }
 
-    public Vector2 GetMouseDir() { return _mouseIndicatorOffset.up; }
-
+    public bool IsMarkerTurned() { return _mouseIndicator.GetContacted(); }
     public Vector2 GetHorizontalMovement(float speed) { return transform.right * Input.GetAxisRaw("Horizontal") * speed; }
 }

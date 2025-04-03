@@ -7,6 +7,7 @@ public enum PLAYER_STATE {
     E_ANIMATED,
 
     E_JUMPING,
+    E_FAST_MOVE,
 }
 
 public class Player : MonoBehaviour
@@ -18,6 +19,9 @@ public class Player : MonoBehaviour
     public float Speed;
     public float JumpForce;
     Vector2 _velocity;
+
+    bool _useGravity;
+    Vector2 _gravity;
 
     PLAYER_STATE _state;
 
@@ -35,8 +39,10 @@ public class Player : MonoBehaviour
 
         _inputController = GetComponent<PlayerInputController>();
 
-        _skill.GetComponent<SkillController>();
+        _skill = GetComponent<SkillController>();
         _skill.Init(new FastMovement());
+        initGravity();
+        _useGravity = true;
     }
 
     // Update is called once per frame
@@ -48,6 +54,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        forceGravity();
         physicsMove();
         physicsJumpMovement();
     }
@@ -56,7 +63,7 @@ public class Player : MonoBehaviour
     {
         if (collision.collider.CompareTag("Ground"))
         {
-            setState(PLAYER_STATE.E_IDLE);
+            SetState(PLAYER_STATE.E_IDLE);
         }
     }
 
@@ -66,6 +73,11 @@ public class Player : MonoBehaviour
         {
             _ani.SetTrigger("Land");
         }
+    }
+
+    void initGravity()
+    {
+        _gravity = transform.up * -9.81f * 5f;
     }
 
     bool compareState(params PLAYER_STATE[] state)
@@ -80,27 +92,29 @@ public class Player : MonoBehaviour
         return rst;
     }
 
-    void setState(PLAYER_STATE st)
+    public void SetState(PLAYER_STATE st)
     {
         _state = st;
+        Debug.Log(_state);
     }
 
     void jump()
     {
         if(compareState(PLAYER_STATE.E_IDLE) && Input.GetKeyDown(KeyCode.Space))
         {
-            setState(PLAYER_STATE.E_READY);
+            SetState(PLAYER_STATE.E_READY);
             _ani.SetTrigger("Jump");
         }
     }
 
     public void jumpTrigger()
     {
-        setState(PLAYER_STATE.E_ANIMATED);
+        SetState(PLAYER_STATE.E_ANIMATED);
     }
 
     void move()
     {
+        if (compareState(PLAYER_STATE.E_FAST_MOVE)) return;
         Vector2 vel = _inputController.GetHorizontalMovement(Speed);
 
         changeMovedState(vel.x);
@@ -109,20 +123,26 @@ public class Player : MonoBehaviour
         _velocity = vel;
     }
 
+    void forceGravity()
+    {
+        if(_useGravity) _rig.AddForce(_gravity, ForceMode2D.Force);
+    }
+
     void physicsJumpMovement()
     {
         if(compareState(PLAYER_STATE.E_ANIMATED))
         {
             _rig.AddForce(transform.up * JumpForce, ForceMode2D.Impulse);
-            setState(PLAYER_STATE.E_JUMPING);
+            SetState(PLAYER_STATE.E_JUMPING);
         }
     }
 
     void physicsMove()
     {
-        _velocity.y = _rig.linearVelocity.y;
-        _velocity.x *= Time.fixedDeltaTime;
-        _rig.linearVelocity = _velocity;
+        //_velocity *= Time.fixedDeltaTime;
+        //_velocity.y = _rig.linearVelocity.y;
+        _rig.position += _velocity * Time.fixedDeltaTime;
+        //_rig.AddForce(_velocity, ForceMode2D.Force);
     }
 
     void turnAround(float velX)
@@ -147,4 +167,13 @@ public class Player : MonoBehaviour
     public Rigidbody2D GetRigibbody() { return _rig; }
 
     public PlayerInputController GetInputController() { return _inputController; }
+
+    public void UseGravity(bool b)
+    { 
+        _useGravity = b;
+        if(b)
+        {
+            initGravity();
+        }
+    }
 }

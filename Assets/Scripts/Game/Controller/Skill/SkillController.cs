@@ -13,8 +13,6 @@ public class SkillController : MonoBehaviour
         _skills = new List<Skill>();
         _index = 0;
         _skills = skils.ToList<Skill>();
-
-        Debug.Log(_skills);
     }
 
     public byte GetCurrentSkillIndex() { return _index; }
@@ -23,12 +21,15 @@ public class SkillController : MonoBehaviour
     //// Start is called once before the first execution of Update after the MonoBehaviour is created
     //void Start()
     //{
-        
+
     //}
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-        
-    //}
+    // Update is called once per frame
+    void Update()
+    {
+        for(int i = 0; i < _skills.Count; i++)
+        {
+            _skills[i].Update();
+        }
+    }
 }
