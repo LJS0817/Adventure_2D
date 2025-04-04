@@ -64,11 +64,6 @@ public class Player : MonoBehaviour
         if (collision.collider.CompareTag("Ground"))
         {
             SetState(PLAYER_STATE.E_IDLE);
-            GameObject o = new GameObject();
-            Debug.Log(collision.contacts.Length);
-            o.transform.position = collision.contacts[0].point;
-            GameObject q = new GameObject();
-            q.transform.position = collision.contacts[1].point;
         }
     }
 
@@ -121,12 +116,11 @@ public class Player : MonoBehaviour
     {
         if (compareState(PLAYER_STATE.E_FAST_MOVE)) return;
         float xSpeed = _inputController.GetHorizontalMovement(Speed);
-        Vector2 vel = transform.right * xSpeed;
 
         changeMovedState(xSpeed);
         turnAround(xSpeed);
 
-        _velocity = vel;
+        _velocity = transform.right * xSpeed;
     }
 
     void forceGravity()

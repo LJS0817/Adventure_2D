@@ -3,6 +3,7 @@ using UnityEngine;
 public class Skill
 {
     protected Vector2 _targetPos = Vector2.zero;
+
     protected string _name;
     protected string _desc;
     protected Player _player = null;
