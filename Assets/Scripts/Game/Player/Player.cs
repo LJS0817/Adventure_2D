@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using UnityEngine;
 
 public enum PLAYER_STATE { 
@@ -139,10 +138,7 @@ public class Player : MonoBehaviour
 
     void physicsMove()
     {
-        //_velocity *= Time.fixedDeltaTime;
-        //_velocity.y = _rig.linearVelocity.y;
         _rig.position += _velocity * Time.fixedDeltaTime;
-        //_rig.AddForce(_velocity, ForceMode2D.Force);
     }
 
     void turnAround(float velX)

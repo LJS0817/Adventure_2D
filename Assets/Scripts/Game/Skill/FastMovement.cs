@@ -16,8 +16,6 @@ public class FastMovement : Skill
         {
             if (Vector2.Distance(_player.transform.position, _targetPos) < 1.5f)
             {
-                Debug.Log(_targetPos);
-                Debug.Log("-----------------------------------------");
                 _player.GetRigibbody().linearVelocity *= 0.3f;
                 _player.transform.up = _targetUp;
                 _player.UseGravity(true);
@@ -31,7 +29,6 @@ public class FastMovement : Skill
     protected override void action()
     {
         _targetPos = _player.GetInputController().Marker.position;
-        Debug.Log(_targetPos);
         _targetUp = _player.GetInputController().GetUpVector();
 
         Vector2 dir = _targetPos - (Vector2)_player.transform.position;
