@@ -9,7 +9,7 @@ public class Skill
     protected Player _player = null;
 
     protected bool _activated = false;
-    protected float _power;
+    protected float _force;
 
     public virtual void Update() {
         if (!_activated || !_player) return;

@@ -6,7 +6,9 @@ public class FastMovement : Skill
 
     public FastMovement()
     {
-        _power = 40f;
+        _name = "몸통박치기";
+        _desc = "몸통으로 돌진";
+        _force = 40f;
         _targetUp = Vector2.zero;
     }
 
@@ -34,6 +36,6 @@ public class FastMovement : Skill
         Vector2 dir = _targetPos - (Vector2)_player.transform.position;
 
         _player.UseGravity(false);
-        _player.GetRigibbody().AddForce(dir.normalized * _power, ForceMode2D.Impulse);
+        _player.GetRigibbody().AddForce(dir.normalized * _force, ForceMode2D.Impulse);
     }
 }

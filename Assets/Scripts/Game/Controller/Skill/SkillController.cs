@@ -8,12 +8,18 @@ public class SkillController : MonoBehaviour
     List<Skill> _skills;
     byte _index;
 
+    BulletController _bulletController;
+    
+
     public void Init(params Skill[] skils)
     {
         _skills = new List<Skill>();
         _index = 0;
         _skills = skils.ToList<Skill>();
+        _bulletController = GetComponent<BulletController>();
     }
+
+    public BulletController GetBulletController() { return _bulletController; }
 
     public byte GetCurrentSkillIndex() { return _index; }
     public void Activate(byte idx, Player p) { _skills[idx].Activate(p); }

@@ -163,6 +163,7 @@ public class Player : MonoBehaviour
     public Rigidbody2D GetRigibbody() { return _rig; }
 
     public PlayerInputController GetInputController() { return _inputController; }
+    public BulletController GetBulletController() { return _skill.GetBulletController(); }
 
     public void UseGravity(bool b)
     { 
